@@ -26,8 +26,7 @@ const { series, collections } = groupCounts(posts);
       </ul>
       <nav class="nav">
         <a href="/">All series</a>
-        <a href="#deploy">Deploy</a>
-      </nav>
+             </nav>
       <input class="search" type="search" placeholder="Search — try a place" aria-label="Search photos" />
     </aside>
 
@@ -44,20 +43,7 @@ const { series, collections } = groupCounts(posts);
           </figure>
         ))}
       </div>
-
-      <section class="deploy" id="deploy">
-        <h2>Deploy</h2>
-        <p>This is a static Astro site. To publish it on Cloudflare Pages:</p>
-        <ol>
-          <li>Push this folder to a GitHub repo.</li>
-          <li>In Cloudflare, go to Workers &amp; Pages → Create → Pages → Connect to Git.</li>
-          <li>Framework preset: <code>Astro</code>. Build command: <code>npm run build</code>. Output: <code>dist</code>.</li>
-          <li>Deploy — you get a <code>*.pages.dev</code> URL. Add a new post by adding a Markdown file in <code>src/content/posts/</code>.</li>
-        </ol>
-        <p>Local preview: <code>npm install</code> then <code>npm run dev</code>.</p>
-        <p>Sample photos are Unsplash placeholders — replace the <code>image</code> field in each post with your own file in <code>public/images/</code>, e.g. <code>/images/golden-gate.jpg</code>.</p>
-      </section>
-    </main>
+        </main>
   </div>
   <script>
     const input = document.querySelector('.search');
