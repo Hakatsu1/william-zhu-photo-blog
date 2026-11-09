@@ -1,6 +1,6 @@
 # william zhu — photography
 
-A minimalist photo blog in the yi.wang style: left sidebar with Series + counts, clean 2-column grid, small centered captions like `Golden Gate Fog  6 · 2026`. Light, serif, no About section.
+A minimalist photo blog: left sidebar with Series + counts, clean 2-column grid, small centered captions like `Golden Gate Fog  6 · 2026`. Light, serif, no About section.
 
 Built with **Astro (static output)** for **Cloudflare Pages**. No adapter needed — this is a static site.
 
