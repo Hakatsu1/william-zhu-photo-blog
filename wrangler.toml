@@ -1,0 +1,8 @@
+name = "william-zhu-photo-blog"
+compatibility_date = "2025-01-01"
+
+# Cloudflare Pages settings.
+# Dashboard alternative: Workers & Pages > Create > Pages > Connect to Git,
+# Framework preset: Astro, Build command: npm run build, Output: dist
+[pages]
+pages_build_output_dir = "dist"

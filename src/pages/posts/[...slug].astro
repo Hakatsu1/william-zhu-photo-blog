@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Base title={`${post.data.title} — william zhu photography`}>
+  <div class="shell" style="grid-template-columns: 1fr;">
+    <main>
+      <article>
+        <div class="post-hero"><img src={post.data.image} alt={post.data.alt} /></div>
+        <div class="post-body">
+          <h1>{post.data.title}</h1>
+          <p class="meta">{post.data.location} · {post.data.date} · {post.data.series} {post.data.count} · {post.data.year}</p>
+          <Content />
+          <div class="exif">
+            <div><span>Camera</span>{post.data.camera}</div>
+            <div><span>Settings</span>{post.data.settings}</div>
+            <div><span>Collection</span>{post.data.collection}</div>
+          </div>
+          <a class="back" href="/">← All series</a>
+        </div>
+      </article>
+    </main>
+  </div>
+</Base>

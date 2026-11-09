@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { slugify, groupCounts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const names = [...new Set(posts.map((p) => p.data.series))];
+  return names.map((name) => ({
+    params: { series: slugify(name) },
+    props: { name },
+  }));
+}
+
+const { name } = Astro.props;
+const all = (await getCollection('posts')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+const posts = all.filter((p) => p.data.series === name);
+const { series } = groupCounts(all);
+---
+<Base title={`${name} — william zhu photography`}>
+  <div class="shell">
+    <aside class="sidebar">
+      <h1 class="brand"><span>william zhu</span><span>photography</span></h1>
+      <h2>Series</h2>
+      <ul class="series-list">
+        {series.map(([s]) => (
+          <li><a href={`/series/${slugify(s)}/`} class={s === name ? 'active' : ''}>{s}<span class="count">{all.filter(p => p.data.series === s).length}</span></a></li>
+        ))}
+      </ul>
+      <nav class="nav">
+        <a href="/">All series</a>
+      </nav>
+    </aside>
+    <main>
+      <h1 class="page-title">{name}</h1>
+      <p class="page-sub">{posts.length} {posts.length === 1 ? 'photo' : 'photos'}</p>
+      <div class="grid">
+        {posts.map((post) => (
+          <figure>
+            <a href={`/posts/${post.id.replace(/\.md$/, '')}/`}>
+              <img src={post.data.image} alt={post.data.alt} loading="lazy" />
+            </a>
+            <figcaption>
+              {post.data.series}<span class="meta">{post.data.count} · {post.data.year}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </main>
+  </div>
+</Base>

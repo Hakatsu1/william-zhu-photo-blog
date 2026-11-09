@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { slugify, groupCounts } from '../lib/posts';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.localeCompare(a.data.date)
+);
+const { series, collections } = groupCounts(posts);
+---
+<Base title="william zhu — photography">
+  <div class="shell">
+    <aside class="sidebar">
+      <h1 class="brand"><span>william zhu</span><span>photography</span></h1>
+      <h2>Series</h2>
+      <ul class="series-list">
+        {series.map(([name]) => (
+          <li><a href={`/series/${slugify(name)}/`}>{name}<span class="count">{posts.filter(p => p.data.series === name).length}</span></a></li>
+        ))}
+      </ul>
+      <h2>Collections</h2>
+      <ul class="collection-list">
+        {collections.map(([name, n]) => (
+          <li><a href={`/?collection=${encodeURIComponent(name)}`}>{name}<span class="count">{n}</span></a></li>
+        ))}
+      </ul>
+      <nav class="nav">
+        <a href="/">All series</a>
+        <a href="#deploy">Deploy</a>
+      </nav>
+      <input class="search" type="search" placeholder="Search — try a place" aria-label="Search photos" />
+    </aside>
+
+    <main>
+      <div class="grid">
+        {posts.map((post) => (
+          <figure>
+            <a href={`/posts/${post.id.replace(/\.md$/, '')}/`}>
+              <img src={post.data.image} alt={post.data.alt} loading="lazy" />
+            </a>
+            <figcaption>
+              {post.data.series}<span class="meta">{post.data.count} · {post.data.year}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <section class="deploy" id="deploy">
+        <h2>Deploy</h2>
+        <p>This is a static Astro site. To publish it on Cloudflare Pages:</p>
+        <ol>
+          <li>Push this folder to a GitHub repo.</li>
+          <li>In Cloudflare, go to Workers &amp; Pages → Create → Pages → Connect to Git.</li>
+          <li>Framework preset: <code>Astro</code>. Build command: <code>npm run build</code>. Output: <code>dist</code>.</li>
+          <li>Deploy — you get a <code>*.pages.dev</code> URL. Add a new post by adding a Markdown file in <code>src/content/posts/</code>.</li>
+        </ol>
+        <p>Local preview: <code>npm install</code> then <code>npm run dev</code>.</p>
+        <p>Sample photos are Unsplash placeholders — replace the <code>image</code> field in each post with your own file in <code>public/images/</code>, e.g. <code>/images/golden-gate.jpg</code>.</p>
+      </section>
+    </main>
+  </div>
+  <script>
+    const input = document.querySelector('.search');
+    input?.addEventListener('input', (e) => {
+      const q = (e.target as HTMLInputElement).value.toLowerCase();
+      document.querySelectorAll('.grid figure').forEach((fig) => {
+        const text = fig.textContent?.toLowerCase() ?? '';
+        (fig as HTMLElement).style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+</Base>
