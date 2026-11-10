@@ -12,6 +12,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const meta = [post.data.location, post.data.date, `${post.data.series || post.data.title} ${post.data.count} · ${post.data.year}`].filter(Boolean).join(' · ');
 ---
 <Base title={`${post.data.title} — william zhu photography`}>
   <div class="shell" style="grid-template-columns: 1fr;">
@@ -20,11 +21,11 @@ const { Content } = await render(post);
         <div class="post-hero"><img src={post.data.image} alt={post.data.alt} /></div>
         <div class="post-body">
           <h1>{post.data.title}</h1>
-          <p class="meta">{post.data.location} · {post.data.date} · {post.data.series} {post.data.count} · {post.data.year}</p>
+          <p class="meta">{meta}</p>
           <Content />
           <div class="exif">
-            <div><span>Camera</span>{post.data.camera}</div>
-            <div><span>Settings</span>{post.data.settings}</div>
+            {post.data.camera && <div><span>Camera</span>{post.data.camera}</div>}
+            {post.data.settings && <div><span>Settings</span>{post.data.settings}</div>}
             <div><span>Collection</span>{post.data.collection}</div>
           </div>
           <a class="back" href="/">← All series</a>
